@@ -1,0 +1,6 @@
+[submodule "monkey"]
+	path = monkey
+	url = https://github.com/bear-in-white-house/monkey
+[submodule "elephant"]
+	path = elephant
+	url = https://github.com/bear-in-white-house/elephant

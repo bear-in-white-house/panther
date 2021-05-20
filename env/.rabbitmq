@@ -1,0 +1,4 @@
+RABBITMQ_DEFAULT_USER=elephant
+RABBITMQ_DEFAULT_PASS=elephant
+RABBITMQ_DEFAULT_VHOST=elephant
+BROKER_URL=amqp://elephant:elephant@rabbitmq:5672/elephant

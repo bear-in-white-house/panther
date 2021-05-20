@@ -1,0 +1,3 @@
+POSTGRES_PASSWORD=elephant_pass
+POSTGRES_USER=elephant_user
+POSTGRES_DB=elephant

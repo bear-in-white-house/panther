@@ -1,0 +1,61 @@
+version: '3.4'
+services:
+    postgresql:
+      image: postgres:11.12
+      env_file:
+        - ./env/.postgresql
+      volumes:
+        - ./postgres-data:/var/lib/postgresql/data
+    redis:
+      restart: always
+      image: redis:6.2.3
+      volumes:
+        - redis-data:/data
+    nginx:
+      restart: always
+      image: nginx:1.20.0
+      volumes:
+        - ./elephant/static:/elephant/elephant/static
+        - ./elephant/upload:/elephant/elephant/upload
+        - ./monkey/conf.d:/etc/nginx/conf.d
+        - ./monkey/nginx.conf:/etc/nginx/nginx.conf
+      env_file:
+        - ./env/.env
+      ports:
+        - target: "8000"
+          published: "8000"
+          mode: host
+        - target: "80"
+          published: "80"
+          mode: host
+    rabbitmq:
+      restart: always
+      image: rabbitmq:3.8.16-management
+      env_file:
+        - ./env/.rabbitmq
+    elephant:
+      image: chalice/elephant:latest
+      build: ./elephant
+      restart: always
+      env_file:
+        - ./env/.env
+        - ./env/.postgresql
+        - ./env/.rabbitmq
+
+      volumes:
+        - ./elephant:/usr/src/app/
+      depends_on:
+        - postgresql
+    # elephant-celery:
+    #   image: chalice/elephant:latest
+    #   build: ./elephant
+    #   restart: always
+    #   volumes:
+    #     - ./elephant:/usr/src/app/
+    #   depends_on:
+    #     - postgresql
+    #   entrypoint: /elephant/celery-entrypoint.sh
+
+volumes:
+    mysqldata:
+    redis-data:
