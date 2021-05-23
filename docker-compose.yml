@@ -46,15 +46,20 @@ services:
         - ./elephant:/usr/src/app/
       depends_on:
         - postgresql
-    # elephant-celery:
-    #   image: chalice/elephant:latest
-    #   build: ./elephant
-    #   restart: always
-    #   volumes:
-    #     - ./elephant:/usr/src/app/
-    #   depends_on:
-    #     - postgresql
-    #   entrypoint: /elephant/celery-entrypoint.sh
+    elephant-celery:
+      image: chalice/elephant:latest
+      build: ./elephant
+      restart: always
+      env_file:
+        - ./env/.env
+        - ./env/.postgresql
+        - ./env/.rabbitmq
+      volumes:
+        - ./elephant:/usr/src/app/
+      depends_on:
+        - postgresql
+        - rabbitmq
+      entrypoint: /usr/src/app/celery-entrypoint.sh
 
 volumes:
     mysqldata:
